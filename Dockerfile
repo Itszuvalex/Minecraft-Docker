@@ -7,9 +7,9 @@ EXPOSE 25565/udp
 
 WORKDIR /srv
 
-COPY ./SetupServer.sh /srv/
+COPY main /srv/
 COPY mcserver /srv/mcserver
 
 WORKDIR /srv/mcserver
 
-ENTRYPOINT ServerStart.sh
+ENTRYPOINT /srv/main

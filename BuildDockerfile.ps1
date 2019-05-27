@@ -26,8 +26,18 @@ if($setup) {
 }
 
 if($build) {
-    Write-Host "Building Dockerfile..."
+    Write-Host "Pulling runner..."
+	git clone https://github.com/Itszuvalex/Minecraft-Runner
+	Write-Host "Building runner..."
+	[Environment]::SetEnvironmentVariable("GOPATH", $PSScriptRoot + "\Minecraft-Runner")
+	[Environment]::SetEnvironmentVariable("GOOS", "linux")
+	[Environment]::SetEnvironmentVariable("GOARCH", "amd64")
+	go build main
+	Write-Host "Building Dockerfile..."
     docker build --build-arg serverzip=%~n1 .
+	Write-Host "Cleaning build files..."
+	Remove-Item -Force -Recurse -Path "Minecraft-Runner"
+	Remove-Item main
 }
 
 if($remove) {
