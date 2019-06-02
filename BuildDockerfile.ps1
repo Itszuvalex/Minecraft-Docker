@@ -1,5 +1,7 @@
 param (
     [String] $server,
+	[String] $mcVer,
+	[String] $forgeVer,
     [Switch] $extract,
     [Switch] $setup,
     [Switch] $build,
@@ -17,11 +19,16 @@ if($extract) {
 }
 
 if($setup) {
-    Write-Host "Setting up server..."
+    Write-Host "Installing forge..."
     pushd mcserver
-    cmd.exe /c "ServerStart.bat"
-    sed -i -e 's/false/true/g' eula.txt
-    cmd.exe /c "ServerStart.bat"
+	wget "https://files.minecraftforge.net/maven/net/minecraftforge/forge/$($mcVer)-$($forgeVer)/forge-$($mcVer)-$($forgeVer)-installer.jar" -OutFile installer.jar
+    java -jar installer.jar --installServer
+	Write-Host "Cleaning forge installer..."
+	Remove-Item installer.jar
+	Remove-Item installer.jar.txt
+	Write-Host "Starting server to generate eula..."
+	java -jar "forge-$($mcVer)-$($forgeVer)-universal.jar" -Xmx2G nogui
+    (Get-Content eula.txt) -replace 'false','true' | Set-Content eula.txt
     popd
 }
 
@@ -29,7 +36,7 @@ if($build) {
     Write-Host "Pulling runner..."
 	git clone https://github.com/Itszuvalex/Minecraft-Runner
 	Write-Host "Building runner..."
-	[Environment]::SetEnvironmentVariable("GOPATH", $PSScriptRoot + "\Minecraft-Runner")
+	[Environment]::SetEnvironmentVariable("GOPATH", "$PSScriptRoot\Minecraft-Runner")
 	[Environment]::SetEnvironmentVariable("GOOS", "linux")
 	[Environment]::SetEnvironmentVariable("GOARCH", "amd64")
 	go build main
