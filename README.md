@@ -6,6 +6,8 @@ BuildDockerfile.bat
 
 Args:
 * Server[String]
+* MCVer[String]
+* ForgeVer[String]
 * Extract[Switch]
 * Setup[Switch]
 * Build[Switch]
