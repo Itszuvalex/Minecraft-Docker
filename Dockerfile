@@ -7,9 +7,9 @@ EXPOSE 25565/udp
 
 WORKDIR /srv
 
-COPY main /srv/
+COPY main /srv/mcserver/
 COPY mcserver /srv/mcserver
 
 WORKDIR /srv/mcserver
 
-ENTRYPOINT /srv/main
+ENTRYPOINT /srv/mcserver/main
