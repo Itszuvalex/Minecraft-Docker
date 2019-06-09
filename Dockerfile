@@ -1,9 +1,10 @@
 
-FROM openjdk
+FROM openjdk:8-jre
 
 ARG serverzip
 EXPOSE 25565/tcp
 EXPOSE 25565/udp
+EXPOSE 8080/tcp
 
 WORKDIR /srv
 
